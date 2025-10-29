@@ -2,33 +2,14 @@ const CACHE_NAME = 'budget-app-cache-v1';
 const URLS_TO_CACHE = [
   '/',
   '/index.html',
-  '/index.tsx',
-  '/App.tsx',
-  '/types.ts',
-  '/constants.ts',
-  '/metadata.json',
-  '/hooks/useLocalStorage.ts',
-  '/context/AppContext.tsx',
-  '/context/LanguageContext.tsx',
-  '/components/Dashboard.tsx',
-  '/components/QuickAdd.tsx',
-  '/components/Budget.tsx',
-  '/components/Accounts.tsx',
-  '/components/Icons.tsx',
-  '/components/Investments.tsx',
-  '/components/History.tsx',
-  '/components/MonthlyReport.tsx',
-  '/components/Modal.tsx',
-  '/components/CustomSelect.tsx',
-  '/utils/testData.ts',
-  '/utils/historicalData.ts',
-  '/constants/crypto.ts',
+  '/assets/index-CRByhzqf.js',    // Point to your built JS file
+  '/assets/index-poJZxa4j.css',   // Point to your built CSS file
+  '/assets/icon-192-DnlUDWXX.svg',
+  '/assets/icon-512-DnlUDWXX.svg',
+  '/assets/manifest-C2EEhZK2.json', // Manifest file
+  // Locales if needed, and images/fonts
   '/locales/en.json',
   '/locales/el.json',
-  '/manifest.json',
-  '/icon-192.svg',
-  '/icon-512.svg',
-  'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
 ];
 
