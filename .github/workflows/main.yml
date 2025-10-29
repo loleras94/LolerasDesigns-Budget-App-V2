@@ -1,7 +1,11 @@
 name: Build and Deploy Vite App
+
 on:
   push:
     branches: [main]
+
+permissions:
+  contents: write  # ✅ gives write access to gh-pages
 
 jobs:
   build-deploy:
