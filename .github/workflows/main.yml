@@ -11,6 +11,7 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the code
       - uses: actions/checkout@v4
 
       # Set up Node.js
@@ -24,14 +25,19 @@ jobs:
       # Install missing dependencies: TailwindCSS, PostCSS, and Autoprefixer
       - run: npm install tailwindcss postcss autoprefixer @tailwindcss/postcss --save-dev
 
-      # Run build
+      # Run the build
       - run: npm run build  # Build the app
 
-      # Deploy to main
-      - name: Deploy to main
+      # Deploy to main branch
+      - name: Deploy build to main
         run: |
+          # Configure Git
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
+          
+          # Commit the dist folder to the main branch
           git add -A
           git commit -m "Deploy build to main branch"
-          git push origin main  # Push `dist/` contents to the `main` branch
+          
+          # Force push dist/ folder to the main branch
+          git push origin main  # Push `dist/` contents to `main` branch
