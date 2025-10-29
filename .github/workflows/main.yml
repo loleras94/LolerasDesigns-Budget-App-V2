@@ -12,11 +12,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Set up Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      # Install dependencies
       - run: npm install
+
+      # Install missing dependencies: TailwindCSS, PostCSS, and Autoprefixer
+      - run: npm install tailwindcss postcss autoprefixer --save-dev
+
+      # Run build
       - run: npm run build  # Build the app
+
+      # Deploy to main
       - name: Deploy to main
         run: |
           git config --global user.name "github-actions"
