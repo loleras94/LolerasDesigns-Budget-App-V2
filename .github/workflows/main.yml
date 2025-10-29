@@ -25,19 +25,19 @@ jobs:
       # Install missing dependencies: TailwindCSS, PostCSS, and Autoprefixer
       - run: npm install tailwindcss postcss autoprefixer @tailwindcss/postcss --save-dev
 
-      # Run the build
+      # Run build
       - run: npm run build  # Build the app
 
-      # Deploy to main branch
+      # Deploy to main
       - name: Deploy build to main
         run: |
-          # Configure Git
+          # Add and commit the dist folder
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           
-          # Commit the dist folder to the main branch
-          git add -A
-          git commit -m "Deploy build to main branch"
+          # Check if there are changes in dist/
+          git add dist/* || echo "No changes to commit"
+          git diff --exit-code || git commit -m "Deploy build to main branch"
           
-          # Force push dist/ folder to the main branch
+          # Push changes to main
           git push origin main  # Push `dist/` contents to `main` branch
