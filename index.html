@@ -2,17 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./assets/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/assets/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LolerasDesigns Budget App</title>
 
     <!-- PWA essentials -->
-    <link rel="manifest" href="./assets/manifest.json" />
+    <link rel="manifest" href="/assets/manifest.json" />
     <meta name="theme-color" content="#1f2937" />
-    <link rel="apple-touch-icon" href="./assets/icon-192.svg" />
+    <link rel="apple-touch-icon" href="/assets/icon-192.svg" />
 
     <!-- Tailwind + Fonts -->
-    <link rel="stylesheet" href="./assets/index.css">  <!-- This will be injected by Vite -->
+    <link rel="stylesheet" href="/assets/index-poJZxa4j.css">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -63,13 +63,13 @@
     <div id="root"></div>
 
     <!-- Main entry: automatically handled by Vite -->
-    <script type="module" src="/assets/index.js"></script> <!-- Vite will replace the hash -->
+    <script type="module" src="/assets/index-xxxxxx.js"></script> <!-- Vite will inject the correct path -->
 
     <!-- Register service worker with relative path -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./service-worker.js')
+          navigator.serviceWorker.register('/service-worker.js')
             .then(registration => {
               console.log('ServiceWorker registration successful with scope:', registration.scope);
             })
