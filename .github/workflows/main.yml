@@ -22,7 +22,7 @@ jobs:
       - run: npm install
 
       # Install missing dependencies: TailwindCSS, PostCSS, and Autoprefixer
-      - run: npm install tailwindcss postcss autoprefixer --save-dev
+      - run: npm install tailwindcss postcss autoprefixer @tailwindcss/postcss --save-dev
 
       # Run build
       - run: npm run build  # Build the app
