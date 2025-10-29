@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => {
           input: 'index.html',
         },
       },
+    css: {
+      postcss: './postcss.config.js', // Link to the PostCSS config
+    },
     define: {
       'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
