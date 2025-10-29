@@ -5,17 +5,17 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   return {
-    base: '/LolerasDesigns-Budget-App-V2/', // 👈 very important: your repo name here!
+    base: '/LolerasDesigns-Budget-App-V2/', // Make sure this is correct for your GitHub Pages URL
     server: {
       port: 3000,
       host: '0.0.0.0',
     },
     plugins: [react()],
-      build: {
-        rollupOptions: {
-          input: 'index.html',
-        },
+    build: {
+      rollupOptions: {
+        input: 'index.html',
       },
+    },
     css: {
       postcss: './postcss.config.js', // Link to the PostCSS config
     },
