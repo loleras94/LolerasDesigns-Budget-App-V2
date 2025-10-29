@@ -2,14 +2,15 @@ name: Build and Deploy Vite App
 
 on:
   push:
-    branches: [main]
+    branches: [main]  # Trigger on push to the main branch
 
 permissions:
-  contents: write  # ✅ gives write access to main
+  contents: write  # Grants write access to gh-pages
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+
     steps:
       # Checkout the code
       - uses: actions/checkout@v4
@@ -22,22 +23,25 @@ jobs:
       # Install dependencies
       - run: npm install
 
-      # Install missing dependencies: TailwindCSS, PostCSS, and Autoprefixer
+      # Install missing dependencies: TailwindCSS, PostCSS, Autoprefixer, and gh-pages
       - run: npm install tailwindcss postcss autoprefixer @tailwindcss/postcss --save-dev
+      - run: npm install --save-dev gh-pages  # Install gh-pages for deployment
 
       # Run build
       - run: npm run build  # Build the app
 
-      # Deploy to main
-      - name: Deploy build to main
+      # Deploy to gh-pages
+      - name: Deploy to gh-pages
         run: |
-          # Add and commit the dist folder
+          # Commit the build directory to gh-pages branch
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           
-          # Check if there are changes in dist/
+          # Add dist folder and commit
           git add dist/* || echo "No changes to commit"
-          git diff --exit-code || git commit -m "Deploy build to main branch"
-          
-          # Push changes to main
-          git push origin main  # Push `dist/` contents to `main` branch
+          git diff --exit-code || git commit -m "Deploy build to gh-pages"
+
+          # Deploy to gh-pages branch using gh-pages package
+          npx gh-pages -d dist  # This will deploy the contents of dist/ to gh-pages branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub Actions token for authentication
