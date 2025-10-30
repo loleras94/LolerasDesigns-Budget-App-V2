@@ -80,14 +80,15 @@ jobs:
           # Checkout the gh-pages branch
           git checkout gh-pages
 
-      # Add dist folder contents to gh-pages without clearing other files
-      - name: Add dist contents to gh-pages
+      # Clean the gh-pages branch (remove existing files)
+      - name: Clean gh-pages branch
         run: |
-          git add dist/*  # Add dist contents to gh-pages
+          rm -rf ./*  # Clean the gh-pages branch (remove existing files)
 
       # Commit and push the dist folder contents to gh-pages
       - name: Commit dist contents to gh-pages
         run: |
+          git add .  # Add everything in the root, including dist files
           git commit -m "Deploy dist contents to gh-pages"
           git push origin gh-pages --force
 
