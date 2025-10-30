@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "cp -r src/locales dist/assets/",  
+    "postbuild": "cp -r src/locales dist/",  
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"
   },
