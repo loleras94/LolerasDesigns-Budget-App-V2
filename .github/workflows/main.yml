@@ -59,7 +59,7 @@ jobs:
           rm -rf ./*
 
           # Copy the files from the dist folder from the previous branch
-          cp -r ../dist/* ./  # Use relative path to get dist from the previous branch
+          cp -r /LolerasDesigns-Budget-App-V2/dist/* ./  # Use relative path to get dist from the previous branch
 
           # Commit and push to gh-pages
           git add .
