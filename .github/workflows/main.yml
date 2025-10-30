@@ -58,6 +58,9 @@ jobs:
           # Checkout the gh-pages branch
           git checkout gh-pages
 
+          # Merge the dist folder files from the current branch (main) into gh-pages
+          git merge --allow-unrelated-histories main --no-commit  # Merge the dist folder into gh-pages
+
           # Clean the gh-pages branch (remove existing files)
           rm -rf ./*
 
