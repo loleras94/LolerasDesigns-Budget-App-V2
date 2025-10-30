@@ -46,6 +46,12 @@ jobs:
         run: |
           cp -r dist/. .  # Copy the contents of dist to the root
 
+      # Set Git author information
+      - name: Set Git author information
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
       # Stage and commit the dist contents to main (only dist contents)
       - name: Commit dist contents to main
         run: |
@@ -65,6 +71,7 @@ jobs:
       # Switch to gh-pages branch
       - name: Checkout gh-pages branch
         run: |
+          # Ensure the Git configuration is still set
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
