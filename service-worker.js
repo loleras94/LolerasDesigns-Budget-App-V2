@@ -8,8 +8,8 @@ const URLS_TO_CACHE = [
   '/assets/icon-512-DnlUDWXX.svg',
   '/assets/manifest-C2EEhZK2.json', // Manifest file
   // Locales if needed, and images/fonts
-  '/locales/en.json',
-  '/locales/el.json',
+  '/assets/locales/en.json',
+  '/assets/locales/el.json',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
 ];
 
