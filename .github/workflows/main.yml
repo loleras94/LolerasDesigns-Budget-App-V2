@@ -43,11 +43,15 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          # Make sure dist exists
+          # Ensure dist folder exists
           if [ ! -d "dist" ]; then
             echo "❌ dist folder not found!"
             exit 1
           fi
+
+          # Check if there are files in dist
+          echo "Checking if dist folder has files:"
+          ls dist/
 
           # Create gh-pages branch if it doesn't exist
           git fetch origin gh-pages || true
@@ -56,8 +60,13 @@ jobs:
           # Clear branch and copy new build
           rm -rf ./*
 
-          # Copy build files from dist folder
-          cp -r dist/* ./  # Only copy the contents of dist/ to the current directory
+          # Check if dist has files and then copy
+          if [ "$(ls -A dist)" ]; then
+            cp -r dist/* ./
+          else
+            echo "❌ dist folder is empty!"
+            exit 1
+          fi
 
           # Commit and push, ignore "nothing to commit" exit
           git add .
