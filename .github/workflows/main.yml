@@ -29,6 +29,10 @@ jobs:
       # Run build
       - run: npm run build  # Build the app
 
+      # List files in dist to debug
+      - name: List files in dist folder
+        run: ls -R dist/
+
       # Deploy to gh-pages
       - name: Deploy to gh-pages
         run: |
