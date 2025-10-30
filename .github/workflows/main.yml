@@ -59,7 +59,10 @@ jobs:
           git checkout gh-pages
 
           # Merge the dist folder files from the current branch (main) into gh-pages
-          git merge --allow-unrelated-histories main --no-commit  # Merge the dist folder into gh-pages
+          git merge --allow-unrelated-histories main --strategy=recursive --strategy-option=theirs --no-commit  # Resolve conflicts automatically by choosing changes from 'main'
+
+          # If conflicts remain, this command will skip them and continue:
+          git diff --name-only --diff-filter=U  # List files with unresolved conflicts
 
           # Clean the gh-pages branch (remove existing files)
           rm -rf ./*
