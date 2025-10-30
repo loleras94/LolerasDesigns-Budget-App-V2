@@ -29,17 +29,19 @@ jobs:
       # Run build
       - run: npm run build  # Build the app
 
+      # Debugging step to check contents of dist/
+      - name: List files in current directory and dist folder
+        run: |
+          echo "Current directory contents:"
+          ls -R .  # List files in the current directory
+          echo "Checking dist directory contents:"
+          ls -R dist/  # List files in the dist directory
+
       # Deploy to gh-pages
       - name: Deploy to gh-pages
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-
-          # Ensure dist folder exists
-          if [ ! -d "dist" ]; then
-            echo "❌ dist folder not found!"
-            exit 1
-          fi
 
           # Ensure we are in the correct directory
           echo "Current working directory:"
@@ -49,17 +51,25 @@ jobs:
           echo "Contents of dist folder:"
           ls dist/
 
-          # Fetch the gh-pages branch without checking it out
+          # Stash uncommitted changes (if any)
+          git stash -u  # Stash untracked files and changes
+
+          # Fetch the gh-pages branch
           git fetch origin gh-pages
 
-          # Merge the dist folder files from the current branch (main) into gh-pages
-          git checkout gh-pages  # Ensure we have the latest gh-pages branch
-          git merge --allow-unrelated-histories main --no-commit  # Merge the dist folder into gh-pages
+          # Checkout the gh-pages branch
+          git checkout gh-pages
 
-          # Copy the dist files to the root of gh-pages
+          # Clean the gh-pages branch (remove existing files)
+          rm -rf ./*
+
+          # Copy the files from dist to gh-pages
           cp -r dist/* ./  # Ensure full path is used
 
           # Commit and push to gh-pages
           git add .
           git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
           git push origin gh-pages --force || true
+
+          # Apply stashed changes (if any)
+          git stash pop || true  # Apply the stashed changes (if any)
