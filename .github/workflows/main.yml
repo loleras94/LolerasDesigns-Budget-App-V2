@@ -41,6 +41,11 @@ jobs:
             exit 1
           fi
 
+      # Stash any uncommitted changes before switching branches
+      - name: Stash changes before switching branches
+        run: |
+          git stash -u  # Stash untracked files and changes
+
       # Deploy to gh-pages
       - name: Deploy to gh-pages
         run: |
@@ -67,3 +72,8 @@ jobs:
           git add .
           git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
           git push origin gh-pages --force || true
+
+      # Apply stashed changes (if any)
+      - name: Reapply stashed changes
+        run: |
+          git stash pop || true  # Reapply the stashed changes if there were any
