@@ -46,28 +46,35 @@ jobs:
         run: |
           git stash -u  # Stash untracked files and changes
 
-      # Merge dist folder contents into gh-pages while staying on main
-      - name: Merge dist folder contents into gh-pages while staying on main
+      # Copy dist folder contents to the working directory (without switching branches)
+      - name: Copy dist folder contents to the working directory
+        run: |
+          cp -r dist/* .  # Copy the contents of dist to the root
+
+      # Switch to gh-pages branch
+      - name: Checkout gh-pages branch
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          # Ensure we're still on the main branch
-          echo "Current branch:"
-          git branch
-
-          # Fetch gh-pages branch (but don't checkout yet)
+          # Fetch the gh-pages branch
           git fetch origin gh-pages
 
-          # Add the dist/ contents to gh-pages directly (while on main)
-          
-          git checkout main -- dist  # Only merge dist/ contents into gh-pages
-
-          # Commit and push to gh-pages
-          git add dist/*
-          git commit -m "Deploy dist folder to gh-pages"
-          git push origin gh-pages --force
+          # Checkout the gh-pages branch
           git checkout gh-pages
+
+      # Clean the gh-pages branch (remove existing files)
+      - name: Clean gh-pages branch
+        run: |
+          rm -rf ./*  # Clean the gh-pages branch (remove existing files)
+
+      # Commit and push the dist folder contents to gh-pages
+      - name: Commit dist contents to gh-pages
+        run: |
+          git add .
+          git commit -m "Deploy dist contents to gh-pages"
+          git push origin gh-pages --force
+
       # Reapply stashed changes (if any)
       - name: Reapply stashed changes
         run: |
