@@ -68,6 +68,11 @@ jobs:
         run: |
           git stash -u  # Stash untracked files and changes (except dist)
 
+      # Add dist folder contents to gh-pages without clearing other files
+      - name: Add dist contents to gh-pages
+        run: |
+          git add dist/*  # Add dist contents to gh-pages
+
       # Switch to gh-pages branch
       - name: Checkout gh-pages branch
         run: |
@@ -81,10 +86,7 @@ jobs:
           # Checkout the gh-pages branch
           git checkout gh-pages
 
-      # Add dist folder contents to gh-pages without clearing other files
-      - name: Add dist contents to gh-pages
-        run: |
-          git add dist/*  # Add dist contents to gh-pages
+
 
       # Commit and push the dist folder contents to gh-pages
       - name: Commit dist contents to gh-pages
