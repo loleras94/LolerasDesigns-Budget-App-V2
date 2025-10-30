@@ -73,6 +73,12 @@ jobs:
         run: |
           git add dist/*  # Add dist contents to gh-pages
 
+      # Commit and push the dist folder contents to gh-pages
+      - name: Commit dist contents to gh-pages
+        run: |
+          git commit -m "Deploy dist contents to gh-pages"
+          git push origin gh-pages --force
+
       # Switch to gh-pages branch
       - name: Checkout gh-pages branch
         run: |
@@ -88,11 +94,7 @@ jobs:
 
 
 
-      # Commit and push the dist folder contents to gh-pages
-      - name: Commit dist contents to gh-pages
-        run: |
-          git commit -m "Deploy dist contents to gh-pages"
-          git push origin gh-pages --force
+
 
       # Reapply stashed changes (if any)
       - name: Reapply stashed changes
