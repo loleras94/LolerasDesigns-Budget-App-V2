@@ -30,11 +30,11 @@ jobs:
       - run: npm run build  # Build the app
 
       # Debugging step to check contents of dist/
-      - name: List files in current directory
+      - name: List files in current directory and dist folder
         run: |
           echo "Current directory contents:"
           ls -R .  # List files in the current directory
-          echo "dist directory contents:"
+          echo "Checking dist directory contents:"
           ls -R dist/  # List files in the dist directory
 
       # Deploy to gh-pages
@@ -43,14 +43,28 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
+          # Make sure we are in the correct directory
+          echo "Current directory:"
+          pwd  # Print the working directory
+
+          # Check if dist directory exists and list its contents
+          if [ ! -d "dist" ]; then
+            echo "❌ dist folder not found!"
+            exit 1
+          fi
+
+          # List the contents of the dist directory again before copying
+          echo "Listing contents of dist folder:"
+          ls dist/
+
           # Create gh-pages branch if it doesn't exist
           git fetch origin gh-pages || true
           git checkout gh-pages || git checkout --orphan gh-pages
 
-          # Clear the gh-pages branch and deploy the build files
+          # Clear the branch and deploy the build files
           rm -rf ./*
 
-          # Explicitly copy the contents of dist folder to the root
+          # Copy files from dist to the root of gh-pages
           cp -r dist/* ./
 
           # Commit and push to gh-pages
