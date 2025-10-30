@@ -52,15 +52,15 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-      # Stage and commit the dist contents to main (only dist contents)
-      - name: Commit dist contents to main
+      # Stage all changes (including dist folder, modified files, and untracked files)
+      - name: Stage all changes
         run: |
-          git add dist/*
-          git commit -m "Add dist contents to main"
+          git add .  # Add all files, including modified and untracked files
 
-      # Push the changes to the main branch
-      - name: Push dist contents to main
+      # Commit all staged changes to main
+      - name: Commit changes to main
         run: |
+          git commit -m "Add dist contents and other changes to main"
           git push origin main
 
       # Stash any uncommitted changes in the main branch (only non-dist files)
@@ -71,7 +71,6 @@ jobs:
       # Switch to gh-pages branch
       - name: Checkout gh-pages branch
         run: |
-          # Ensure the Git configuration is still set
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
