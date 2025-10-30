@@ -43,7 +43,13 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          # Make sure we are in the correct directory
+          # Ensure dist folder exists
+          if [ ! -d "dist" ]; then
+            echo "❌ dist folder not found!"
+            exit 1
+          fi
+
+          # Ensure we are in the correct directory
           echo "Current working directory:"
           pwd  # Print the current working directory
 
@@ -51,15 +57,17 @@ jobs:
           echo "Contents of dist folder:"
           ls dist/
 
-          # Create gh-pages branch if it doesn't exist
-          git fetch origin gh-pages || true
-          git checkout gh-pages || git checkout --orphan gh-pages
+          # Fetch the gh-pages branch (no need to create a new one)
+          git fetch origin gh-pages
 
-          # Clear the branch and deploy the build files
+          # Checkout the gh-pages branch (we do not need to create it)
+          git checkout gh-pages
+
+          # Clear the gh-pages branch and deploy the build files
           rm -rf ./*
 
-          # Copy the files from the dist folder from the previous branch
-          cp -r /LolerasDesigns-Budget-App-V2/dist/* ./  # Use relative path to get dist from the previous branch
+          # Copy the build files from dist to the root of gh-pages
+          cp -r dist/* ./  # Using relative path to ensure we copy everything from dist/
 
           # Commit and push to gh-pages
           git add .
