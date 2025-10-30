@@ -46,6 +46,12 @@ jobs:
         run: |
           cp -r dist/. .  # Copy the contents of dist to the root
 
+      # Ensure files are staged properly for commit
+      - name: Add dist contents to git
+        run: |
+          git add dist/*  # Add all dist contents
+          git status  # Check which files are staged
+
       # Stash any uncommitted changes in the main branch (only non-dist files)
       - name: Stash uncommitted changes (only non-dist files)
         run: |
@@ -71,7 +77,7 @@ jobs:
       # Commit and push the dist folder contents to gh-pages
       - name: Commit dist contents to gh-pages
         run: |
-          git add .
+          git add .  # Add everything including dist contents
           git commit -m "Deploy dist contents to gh-pages"
           git push origin gh-pages --force
 
