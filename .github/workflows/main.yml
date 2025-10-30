@@ -12,26 +12,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the code
       - uses: actions/checkout@v4
 
+      # Set up Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # Install dependencies
       - run: npm install
+
+      # Install missing dependencies: TailwindCSS, PostCSS, and Autoprefixer
       - run: npm install tailwindcss postcss autoprefixer @tailwindcss/postcss gh-pages --save-dev
-      - run: npm run build
 
-      # 👇 This step won't fail if there's nothing to commit
-      - name: Commit package updates if changed
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add package.json package-lock.json || true
-          git diff --cached --quiet || git commit -m "chore: update dependencies"
-          git push origin main || true
+      # Run build
+      - run: npm run build  # Build the app
 
-      # 👇 Deploy built dist folder to gh-pages
+      # Deploy to gh-pages
       - name: Deploy to gh-pages
         run: |
           git config --global user.name "github-actions"
@@ -45,7 +43,7 @@ jobs:
 
           # Create gh-pages branch if it doesn't exist
           git fetch origin gh-pages || true
-          git checkout gh-pages 2>/dev/null || git checkout --orphan gh-pages
+          git checkout gh-pages || git checkout --orphan gh-pages
 
           # Clear branch and copy new build
           rm -rf ./*
@@ -54,4 +52,4 @@ jobs:
           # Commit and push, ignore "nothing to commit" exit
           git add .
           git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
-          git push origin gh-pages --force || true
+          git push origin gh-pages || true
