@@ -49,7 +49,7 @@ jobs:
       # Copy dist folder contents to the working directory (without switching branches)
       - name: Copy dist folder contents to the working directory
         run: |
-          cp -r dist/* .  # Copy the contents of dist to the root
+          cp -r dist/. .  # Copy the contents of dist to the root
 
       # Switch to gh-pages branch
       - name: Checkout gh-pages branch
