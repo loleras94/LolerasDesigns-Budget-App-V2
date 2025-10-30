@@ -55,7 +55,9 @@ jobs:
 
           # Clear branch and copy new build
           rm -rf ./*
-          cp -r dist/* ./
+
+          # Copy build files from dist folder
+          cp -r dist/* ./  # Only copy the contents of dist/ to the current directory
 
           # Commit and push, ignore "nothing to commit" exit
           git add .
