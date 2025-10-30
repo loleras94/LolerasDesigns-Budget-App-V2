@@ -58,17 +58,18 @@ jobs:
           # Checkout the gh-pages branch
           git checkout gh-pages
 
-          # Clean the gh-pages branch (remove existing files)
-          rm -rf ./*
-
           # Merge the dist folder files from the current branch (main) into gh-pages
-          git merge --allow-unrelated-histories main --no-commit  # Merge the dist folder into gh-pages
+          # Automatically resolve conflicts in favor of 'main' using the 'theirs' option
+          git merge --allow-unrelated-histories main --strategy=recursive --strategy-option=theirs --no-commit  # Merge and resolve conflicts favoring 'main'
 
           # List the files after merging
           echo "Contents after merge:"
           ls
 
-          # Explicitly copy the dist files to the root of gh-pages
+          # Clean the gh-pages branch (remove existing files)
+          rm -rf ./*
+
+          # Copy the dist files to the root of gh-pages
           cp -r dist/* ./  # Ensure full path is used
 
           # Commit and push to gh-pages
