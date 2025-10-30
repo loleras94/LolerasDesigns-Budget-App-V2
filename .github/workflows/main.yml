@@ -29,28 +29,27 @@ jobs:
       # Run build
       - run: npm run build  # Build the app
 
+      # Ensure dist folder is populated
+      - name: Check dist folder
+        run: |
+          echo "Listing contents of dist folder:"
+          ls dist/
+
+          # Check if dist is empty
+          if [ ! -d "dist" ] || [ -z "$(ls -A dist)" ]; then
+            echo "❌ dist folder is empty or missing!"
+            exit 1
+          fi
+
       # Deploy to gh-pages
       - name: Deploy to gh-pages
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          # Ensure dist folder exists
-          if [ ! -d "dist" ]; then
-            echo "❌ dist folder not found!"
-            exit 1
-          fi
-
           # Ensure we are in the correct directory
           echo "Current working directory:"
           pwd  # Print the current working directory
-
-          # List contents of dist folder explicitly
-          echo "Contents of dist folder:"
-          ls dist/
-
-          # Stash any uncommitted changes before switching branches
-          git stash -u  # Stash untracked files and changes
 
           # Fetch the gh-pages branch
           git fetch origin gh-pages
@@ -61,12 +60,10 @@ jobs:
           # Clean the gh-pages branch (remove existing files)
           rm -rf ./*
 
-          # Add the dist folder directly to gh-pages (this is the fix)
-          git add dist/*  # Add contents of dist/ directly
+          # Copy the dist folder contents to gh-pages
+          cp -r dist/* ./  # Ensure full path is used
 
           # Commit and push to gh-pages
-          git commit -m "Deploy build to gh-pages"
+          git add .
+          git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
           git push origin gh-pages --force || true
-
-          # Apply stashed changes (if any)
-          git stash pop || true  # Reapply the stashed changes if there were any
