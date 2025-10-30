@@ -10,37 +10,48 @@ permissions:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      # Checkout the code
       - uses: actions/checkout@v4
 
-      # Set up Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Install dependencies
       - run: npm install
+      - run: npm install tailwindcss postcss autoprefixer @tailwindcss/postcss gh-pages --save-dev
+      - run: npm run build
 
-      # Install missing dependencies: TailwindCSS, PostCSS, and Autoprefixer
-      - run: npm install tailwindcss postcss autoprefixer @tailwindcss/postcss --save-dev
-
-      # Run build
-      - run: npm run build  # Build the app
-
-      # Add and commit package updates
-      - name: Commit package updates
+      # 👇 This step won't fail if there's nothing to commit
+      - name: Commit package updates if changed
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add package.json package-lock.json
-          git commit -m "chore: update dependencies and package-lock"
-          git push origin main  # Push updated package files to `main`
+          git add package.json package-lock.json || true
+          git diff --cached --quiet || git commit -m "chore: update dependencies"
+          git push origin main || true
 
-      # Deploy to gh-pages
+      # 👇 Deploy built dist folder to gh-pages
       - name: Deploy to gh-pages
         run: |
-          # Deploy the dist folder to gh-pages
-          git add dist/*
-          git commit -m "Deploy build to gh-pages"
-          git push origin main:gh-pages
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          # Make sure dist exists
+          if [ ! -d "dist" ]; then
+            echo "❌ dist folder not found!"
+            exit 1
+          fi
+
+          # Create gh-pages branch if it doesn't exist
+          git fetch origin gh-pages || true
+          git checkout gh-pages 2>/dev/null || git checkout --orphan gh-pages
+
+          # Clear branch and copy new build
+          rm -rf ./*
+          cp -r dist/* ./
+
+          # Commit and push, ignore "nothing to commit" exit
+          git add .
+          git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
+          git push origin gh-pages --force || true
