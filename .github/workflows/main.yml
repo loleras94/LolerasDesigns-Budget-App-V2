@@ -52,7 +52,11 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-
+      # Stage and commit the dist contents to main (only dist contents)
+      - name: Commit dist contents to main
+        run: |
+          git add dist/*
+          git commit -m "Add dist contents to main"
 
       # Push the changes to the main branch
       - name: Push dist contents to main
@@ -63,17 +67,6 @@ jobs:
       - name: Stash uncommitted changes (only non-dist files)
         run: |
           git stash -u  # Stash untracked files and changes (except dist)
-
-      # Add dist folder contents to gh-pages without clearing other files
-      - name: Add dist contents to gh-pages
-        run: |
-          git add dist/*  # Add dist contents to gh-pages
-
-      # Commit and push the dist folder contents to gh-pages
-      - name: Commit dist contents to gh-pages
-        run: |
-          git commit -m "Deploy dist contents to gh-pages"
-          git push origin gh-pages --force
 
       # Switch to gh-pages branch
       - name: Checkout gh-pages branch
@@ -88,9 +81,16 @@ jobs:
           # Checkout the gh-pages branch
           git checkout gh-pages
 
+      # Add dist folder contents to gh-pages without clearing other files
+      - name: Add dist contents to gh-pages
+        run: |
+          git add dist/*  # Add dist contents to gh-pages
 
-
-
+      # Commit and push the dist folder contents to gh-pages
+      - name: Commit dist contents to gh-pages
+        run: |
+          git commit -m "Deploy dist contents to gh-pages"
+          git push origin gh-pages --force
 
       # Reapply stashed changes (if any)
       - name: Reapply stashed changes
