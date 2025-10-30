@@ -1,0 +1,65 @@
+name: Build and Deploy Vite App
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write  # ✅ gives write access to main
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - uses: actions/checkout@v4
+
+      # Set up Node.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Install dependencies
+      - run: npm install
+
+      # Install missing dependencies: TailwindCSS, PostCSS, and Autoprefixer
+      - run: npm install tailwindcss postcss autoprefixer @tailwindcss/postcss gh-pages --save-dev
+
+      # Run build
+      - run: npm run build  # Build the app
+
+      # Deploy to gh-pages
+      - name: Deploy to gh-pages
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          # Ensure dist folder exists
+          if [ ! -d "dist" ]; then
+            echo "❌ dist folder not found!"
+            exit 1
+          fi
+
+          # Ensure we are in the correct directory
+          echo "Current working directory:"
+          pwd  # Print the current working directory
+
+          # List contents of dist folder explicitly
+          echo "Contents of dist folder:"
+          ls dist/
+
+          # Fetch the gh-pages branch without checking it out
+          git fetch origin gh-pages
+
+          # Merge the dist folder files from the current branch (main) into gh-pages
+          git checkout gh-pages  # Ensure we have the latest gh-pages branch
+          git merge --allow-unrelated-histories main --no-commit  # Merge the dist folder into gh-pages
+
+          # Copy the dist files to the root of gh-pages
+          cp -r dist/* ./  # Ensure full path is used
+
+          # Commit and push to gh-pages
+          git add .
+          git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
+          git push origin gh-pages --force || true
