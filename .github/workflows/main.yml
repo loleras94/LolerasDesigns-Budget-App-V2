@@ -29,22 +29,17 @@ jobs:
       # Run build
       - run: npm run build  # Build the app
 
-      # Ensure dist folder is populated
-      - name: Check dist folder
+      # Ensure dist folder is populated and check its contents
+      - name: Check dist folder contents
         run: |
           echo "Listing contents of dist folder:"
-          ls dist/
+          ls -R dist/
 
-          # Check if dist is empty
+          # Check if dist folder exists and has contents
           if [ ! -d "dist" ] || [ -z "$(ls -A dist)" ]; then
             echo "❌ dist folder is empty or missing!"
             exit 1
           fi
-
-      # Stash any uncommitted changes before switching branches
-      - name: Stash uncommitted changes
-        run: |
-          git stash -u  # Stash untracked files and changes
 
       # Deploy to gh-pages
       - name: Deploy to gh-pages
@@ -65,15 +60,11 @@ jobs:
           # Clean the gh-pages branch (remove existing files)
           rm -rf ./*
 
-          # Copy the dist folder contents to gh-pages
-          cp -r dist/. ./  # Ensure full path is used
+          # Add the necessary files from dist/ to gh-pages
+          git add dist/index.html
+          git add dist/assets/*
+          git add dist/locales/*
 
           # Commit and push to gh-pages
-          git add .
           git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
           git push origin gh-pages --force || true
-
-      # Apply stashed changes (if any)
-      - name: Reapply stashed changes
-        run: |
-          git stash pop || true  # Reapply the stashed changes if there were any
