@@ -29,9 +29,13 @@ jobs:
       # Run build
       - run: npm run build  # Build the app
 
-      # List files in dist to debug
+      # Debugging step to check contents of dist/
       - name: List files in dist folder
-        run: ls -R dist/
+        run: |
+          echo "Current directory contents:"
+          ls -R .  # List files in the current directory
+          echo "dist directory contents:"
+          ls -R dist/  # List files in the dist directory
 
       # Deploy to gh-pages
       - name: Deploy to gh-pages
