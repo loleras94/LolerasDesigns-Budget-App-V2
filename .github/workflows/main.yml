@@ -41,12 +41,7 @@ jobs:
             exit 1
           fi
 
-      # Stash any uncommitted changes before switching branches
-      - name: Stash changes before switching branches
-        run: |
-          git stash -u  # Stash untracked files and changes
-
-      # Deploy to gh-pages
+      # Deploy to gh-pages without using cp
       - name: Deploy to gh-pages
         run: |
           git config --global user.name "github-actions"
@@ -65,15 +60,10 @@ jobs:
           # Clean the gh-pages branch (remove existing files)
           rm -rf ./*
 
-          # Copy the dist folder contents to gh-pages
-          cp -r dist/* ./  # Ensure full path is used
+          # Copy the entire dist folder content directly into the gh-pages branch
+          cp -r dist/. ./  # Copy everything inside dist/ to the root of gh-pages
 
           # Commit and push to gh-pages
           git add .
           git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
           git push origin gh-pages --force || true
-
-      # Apply stashed changes (if any)
-      - name: Reapply stashed changes
-        run: |
-          git stash pop || true  # Reapply the stashed changes if there were any
