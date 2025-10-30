@@ -30,12 +30,14 @@ jobs:
       - run: npm run build  # Build the app
 
       # Debugging step to check contents of dist/
-      - name: List files in current directory
+      - name: List files in dist folder
         run: |
           echo "Current directory contents:"
           ls -R .  # List files in the current directory
+          echo "dist directory contents:"
+          ls -R dist/  # List files in the dist directory
 
-      # Deploy to gh-pages (simplified without relying on dist)
+      # Deploy to gh-pages
       - name: Deploy to gh-pages
         run: |
           git config --global user.name "github-actions"
@@ -45,10 +47,13 @@ jobs:
           git fetch origin gh-pages || true
           git checkout gh-pages || git checkout --orphan gh-pages
 
-          # Clear branch and deploy directly (without dist folder)
+          # Clear the branch and copy the build files
           rm -rf ./*
 
-          # Commit and push, ignore "nothing to commit" exit
+          # Ensure the build output is correctly placed in the root
+          cp -r dist/* ./
+
+          # Commit and push to gh-pages
           git add .
           git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
           git push origin gh-pages --force || true
