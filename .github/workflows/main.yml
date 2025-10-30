@@ -61,12 +61,11 @@ jobs:
           # Clean the gh-pages branch (remove existing files)
           rm -rf ./*
 
-          # Copy the dist folder contents to the gh-pages branch (ONLY dist/ folder)
-          cp -r dist/* ./  # Ensure full path is used
+          # Add the dist folder directly to gh-pages (this is the fix)
+          git add dist/*  # Add contents of dist/ directly
 
           # Commit and push to gh-pages
-          git add .
-          git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
+          git commit -m "Deploy build to gh-pages"
           git push origin gh-pages --force || true
 
           # Apply stashed changes (if any)
