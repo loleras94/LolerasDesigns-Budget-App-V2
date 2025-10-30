@@ -48,10 +48,6 @@ jobs:
           # Clear branch and deploy directly (without dist folder)
           rm -rf ./*
 
-          # Deploy the contents from the current build folder (adjust according to your app's needs)
-          # For example, if the build output is already directly in the root directory:
-          cp -r * ./
-
           # Commit and push, ignore "nothing to commit" exit
           git add .
           git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
