@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "cp -r locales dist/",  // Copy locales after the build
+    "postbuild": "cp -r locales dist/",  
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"
   },
