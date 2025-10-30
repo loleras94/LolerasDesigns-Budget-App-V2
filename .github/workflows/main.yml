@@ -43,13 +43,7 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          # Ensure dist folder exists
-          if [ ! -d "dist" ]; then
-            echo "❌ dist folder not found!"
-            exit 1
-          fi
-
-          # Ensure we are in the correct directory
+          # Make sure we are in the correct directory
           echo "Current working directory:"
           pwd  # Print the current working directory
 
@@ -64,8 +58,8 @@ jobs:
           # Clear the branch and deploy the build files
           rm -rf ./*
 
-          # Explicitly copy files from dist to the root of gh-pages
-          cp -r dist/* ./  # Ensure full path is used
+          # Copy the files from the dist folder from the previous branch
+          cp -r ../dist/* ./  # Use relative path to get dist from the previous branch
 
           # Commit and push to gh-pages
           git add .
