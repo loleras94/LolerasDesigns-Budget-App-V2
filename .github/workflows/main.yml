@@ -41,20 +41,15 @@ jobs:
             exit 1
           fi
 
-      # Stash any uncommitted changes before switching branches
-      - name: Stash uncommitted changes
-        run: |
-          git stash -u  # Stash untracked files and changes
-
-      # Deploy to gh-pages
-      - name: Deploy to gh-pages
+      # Merge dist folder into gh-pages before switching branches
+      - name: Merge dist folder into gh-pages
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-
+          
           # Ensure we are in the correct directory
           echo "Current working directory:"
-          pwd  # Print the current working directory
+          pwd
 
           # Fetch the gh-pages branch
           git fetch origin gh-pages
@@ -62,19 +57,15 @@ jobs:
           # Checkout the gh-pages branch
           git checkout gh-pages
 
-          # Clean the gh-pages branch (remove existing files)
-          rm -rf ./*
+          # Merge the dist folder from main into gh-pages
+          git checkout main -- dist  # Checkout only the dist folder from main into gh-pages
 
-          # Add the necessary files from dist/ to gh-pages
-          git add dist/index.html
-          git add dist/assets/*
-          git add dist/locales/*
+          # Commit the dist folder to gh-pages
+          git add dist/
+          git commit -m "Merge dist folder from main to gh-pages"
+          git push origin gh-pages --force
 
-          # Commit and push to gh-pages
-          git diff --cached --quiet || git commit -m "Deploy build to gh-pages"
-          git push origin gh-pages --force || true
-
-      # Apply stashed changes (if any)
-      - name: Reapply stashed changes
+      # Verify deployment
+      - name: Verify Deployment
         run: |
-          git stash pop || true  # Reapply the stashed changes if there were any
+          echo "Deployment to gh-pages successful!"
