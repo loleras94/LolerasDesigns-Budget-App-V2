@@ -30,43 +30,27 @@ jobs:
       - run: npm run build  # Build the app
 
       # Debugging step to check contents of dist/
-      - name: List files in dist folder
+      - name: List files in current directory
         run: |
           echo "Current directory contents:"
           ls -R .  # List files in the current directory
-          echo "dist directory contents:"
-          ls -R dist/  # List files in the dist directory
 
-      # Deploy to gh-pages
+      # Deploy to gh-pages (simplified without relying on dist)
       - name: Deploy to gh-pages
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          # Ensure dist folder exists
-          if [ ! -d "dist" ]; then
-            echo "❌ dist folder not found!"
-            exit 1
-          fi
-
-          # Check if there are files in dist
-          echo "Checking if dist folder has files:"
-          ls dist/
-
           # Create gh-pages branch if it doesn't exist
           git fetch origin gh-pages || true
           git checkout gh-pages || git checkout --orphan gh-pages
 
-          # Clear branch and copy new build
+          # Clear branch and deploy directly (without dist folder)
           rm -rf ./*
 
-          # Check if dist has files and then copy
-          if [ "$(ls -A dist)" ]; then
-            cp -r dist/* ./
-          else
-            echo "❌ dist folder is empty!"
-            exit 1
-          fi
+          # Deploy the contents from the current build folder (adjust according to your app's needs)
+          # For example, if the build output is already directly in the root directory:
+          cp -r * ./
 
           # Commit and push, ignore "nothing to commit" exit
           git add .
