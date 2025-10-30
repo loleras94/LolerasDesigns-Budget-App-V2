@@ -41,15 +41,15 @@ jobs:
             exit 1
           fi
 
-      # Stash uncommitted changes before switching branches
-      - name: Stash uncommitted changes
-        run: |
-          git stash -u  # Stash untracked files and changes
-
       # Copy dist folder contents to the working directory (without switching branches)
       - name: Copy dist folder contents to the working directory
         run: |
           cp -r dist/. .  # Copy the contents of dist to the root
+
+      # Stash any uncommitted changes in the main branch (only non-dist files)
+      - name: Stash uncommitted changes (only non-dist files)
+        run: |
+          git stash -u  # Stash untracked files and changes (except dist)
 
       # Switch to gh-pages branch
       - name: Checkout gh-pages branch
