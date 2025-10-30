@@ -52,11 +52,7 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-      # Stage and commit the dist contents to main (only dist contents)
-      - name: Commit dist contents to main
-        run: |
-          git add dist/*
-          git commit -m "Add dist contents to main"
+
 
       # Push the changes to the main branch
       - name: Push dist contents to main
